@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Color Picker</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div class="header">
+        <h3 class="title">Pick a colour using Hex, RGB, or HSL</h3>
+        <div class="radioButtons">
+            <div class="useHex">
+                <input class="button Hex-code-button" id="hex-input" name="radio" type="radio" checked>
+                <label for="hex-input">Hex Code</label>
+            </div>
+
+            <div class="useRGB">
+                <input class="button RGB-code-button" id="rgb-input" name="radio" type="radio">
+                <label for="rgb-input">RGB</label>
+            </div>
+
+            <div class="useHSL">
+                <input class="button HSL-code-button" id="hsl-input" name="radio" type="radio">
+                <label for="hsl-input">HSL</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="colorView"></div>
+
+
+    <div class="hex-container">
+        <label class="color-hex" for="color-hex"> Enter HEX Code Below</label>
+        <input class="hex-filed" type="text" id="hex" name="hex" placeholder="color Hex" maxlength="7" />
+    </div>
+
+    <div class="rgb-container">
+        <p class="rgd-title"> Enter Red, Green, and Blue values below</p>
+        <div class="rgb-inputs">
+            <input class="r" type="number" id="hex" name="hex" placeholder="R" maxlength="3" />
+            <input class="g" type="number" id="hex" name="hex" placeholder="G" maxlength="3" />
+            <input class="b" type="number" id="hex" name="hex" placeholder="B" maxlength="3" />
+        </div>
+    </div>
+
+    
+    <div class="hsl-container">
+        <p class="hsl-title"> Enter Red, Green, and Blue values below</p>
+        <div class="hsl-inputs">
+        <input class="h" type="number" id="hex" name="hex" placeholder="H" maxlength="3" />
+        <input class="s" type="number" id="hex" name="hex" placeholder="S" maxlength="3" />
+        <input class="l" type="number" id="hex" name="hex" placeholder="L" maxlength="3" />
+    </div>
+    </div>
+
+    <div class="submit">Use this color</div>
+
+
+
+    <script src="./script.js"></script>
+</body>
+
+</html>
