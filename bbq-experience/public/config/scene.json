@@ -1,0 +1,279 @@
+{
+  "version": 1,
+  "assets": {
+    "grill": "assets/grill.jpg"
+  },
+  "hero": {
+    "eyebrow": "Charcoal grill house",
+    "title": "Fired over live coals.",
+    "subtitle": "Hand-cut meat, overnight marinades and oak charcoal. Scroll to serve."
+  },
+  "platesSection": {
+    "title": "From the coals to your table",
+    "subtitle": "Every skewer is finished on the grill and plated to order."
+  },
+  "motion": {
+    "scrub": 0.8,
+    "pinLength": 1.3,
+    "mobileEndOffset": 0.4,
+    "timing": {
+      "lift": [
+        0.0,
+        0.1
+      ],
+      "flight": [
+        0.04,
+        0.48
+      ],
+      "pull": [
+        0.52,
+        0.68
+      ],
+      "fade": [
+        0.58,
+        0.7
+      ],
+      "reveal": [
+        0.6,
+        0.78
+      ],
+      "settle": [
+        0.7,
+        0.92
+      ]
+    }
+  },
+  "skewers": [
+    {
+      "id": "beef",
+      "animate": true,
+      "timingOffset": 0,
+      "images": {
+        "skewer": "assets/skewers/beef.png",
+        "plateEmpty": "assets/plates/beef-empty.png",
+        "plateDish": "assets/plates/beef-dish.png"
+      },
+      "dish": {
+        "name": "Beef Kebab",
+        "description": "Prime beef shoulder, onion and seven-spice, seared over oak charcoal.",
+        "price": "$24"
+      },
+      "grill": {
+        "x": 50,
+        "y": 36,
+        "width": 62,
+        "rotation": -2
+      },
+      "lift": {
+        "x": 0,
+        "y": -6,
+        "peakScale": 1.2,
+        "tilt": -6
+      },
+      "path": {
+        "curviness": 1.25,
+        "via": [
+          {
+            "t": 0.35,
+            "x": -5,
+            "y": -6
+          },
+          {
+            "t": 0.72,
+            "x": -2,
+            "y": -8
+          }
+        ]
+      },
+      "arrival": {
+        "x": 0.05,
+        "y": -0.04,
+        "width": 1.75,
+        "rotation": -6,
+        "sway": 3
+      },
+      "pull": {
+        "distance": -0.85,
+        "rise": -0.03,
+        "tilt": -2
+      },
+      "mobile": {
+        "arrival": {
+          "width": 1.12,
+          "y": -0.02
+        },
+        "pull": {
+          "distance": -0.6
+        },
+        "path": {
+          "via": [
+            {
+              "t": 0.4,
+              "x": -8,
+              "y": -4
+            },
+            {
+              "t": 0.75,
+              "x": -3,
+              "y": -4
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "tawook",
+      "animate": false,
+      "timingOffset": 0.03,
+      "images": {
+        "skewer": "assets/skewers/tawook.png",
+        "plateEmpty": "assets/plates/tawook-empty.png",
+        "plateDish": "assets/plates/tawook-dish.png"
+      },
+      "dish": {
+        "name": "Shish Tawook",
+        "description": "Chicken breast in garlic, lemon and yoghurt marinade with charred peppers.",
+        "price": "$21"
+      },
+      "grill": {
+        "x": 50,
+        "y": 55,
+        "width": 62,
+        "rotation": 1
+      },
+      "lift": {
+        "x": 0,
+        "y": -6,
+        "peakScale": 1.2,
+        "tilt": 5
+      },
+      "path": {
+        "curviness": 1.25,
+        "via": [
+          {
+            "t": 0.35,
+            "x": 4,
+            "y": -6
+          },
+          {
+            "t": 0.72,
+            "x": 1,
+            "y": -8
+          }
+        ]
+      },
+      "arrival": {
+        "x": 0.05,
+        "y": -0.04,
+        "width": 1.75,
+        "rotation": -6,
+        "sway": 3
+      },
+      "pull": {
+        "distance": -0.85,
+        "rise": -0.03,
+        "tilt": -2
+      },
+      "mobile": {
+        "arrival": {
+          "width": 1.12,
+          "y": -0.02
+        },
+        "pull": {
+          "distance": -0.6
+        },
+        "path": {
+          "via": [
+            {
+              "t": 0.4,
+              "x": -8,
+              "y": -4
+            },
+            {
+              "t": 0.75,
+              "x": -3,
+              "y": -4
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "chicken",
+      "animate": false,
+      "timingOffset": 0.06,
+      "images": {
+        "skewer": "assets/skewers/chicken.png",
+        "plateEmpty": "assets/plates/chicken-empty.png",
+        "plateDish": "assets/plates/chicken-dish.png"
+      },
+      "dish": {
+        "name": "Grilled Chicken",
+        "description": "Boneless thigh, sumac and smoked paprika, basted in charcoal butter.",
+        "price": "$22"
+      },
+      "grill": {
+        "x": 50,
+        "y": 74,
+        "width": 62,
+        "rotation": -1
+      },
+      "lift": {
+        "x": 0,
+        "y": -6,
+        "peakScale": 1.2,
+        "tilt": -4
+      },
+      "path": {
+        "curviness": 1.25,
+        "via": [
+          {
+            "t": 0.35,
+            "x": 6,
+            "y": -6
+          },
+          {
+            "t": 0.72,
+            "x": 2,
+            "y": -8
+          }
+        ]
+      },
+      "arrival": {
+        "x": 0.05,
+        "y": -0.04,
+        "width": 1.75,
+        "rotation": -6,
+        "sway": 3
+      },
+      "pull": {
+        "distance": -0.85,
+        "rise": -0.03,
+        "tilt": -2
+      },
+      "mobile": {
+        "arrival": {
+          "width": 1.12,
+          "y": -0.02
+        },
+        "pull": {
+          "distance": -0.6
+        },
+        "path": {
+          "via": [
+            {
+              "t": 0.4,
+              "x": -8,
+              "y": -4
+            },
+            {
+              "t": 0.75,
+              "x": -3,
+              "y": -4
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
