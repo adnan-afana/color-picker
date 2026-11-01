@@ -1,10 +1,8 @@
 """
 Procedural placeholder renderer for the BBQ prototype.
 
-Produces shaded, photo-styled stand-ins for every replaceable image:
-  public/assets/skewers/{beef,tawook,chicken}.png        (transparent)
+Produces shaded, photo-styled stand-ins for the empty serving plates:
   public/assets/plates/{beef,tawook,chicken}-empty.png   (transparent)
-  public/assets/plates/{beef,tawook,chicken}-dish.png    (transparent)
 
 Replace any of these files with real photography (same file name) and the
 site picks them up without code changes.
@@ -435,14 +433,12 @@ def render_grill(seed=7, W=2400, H=1350) -> Image.Image:
 
 
 def main():
-    (ROOT / "skewers").mkdir(parents=True, exist_ok=True)
+    # Only the empty serving plates are still placeholders; the food comes
+    # from the approved composite (see prepare_grill_items.py).
     (ROOT / "plates").mkdir(parents=True, exist_ok=True)
     for i, name in enumerate(["beef", "tawook", "chicken"]):
-        print(name, "…")
-        render_skewer(name, 100 + i).save(ROOT / "skewers" / f"{name}.png", optimize=True)
         render_plate(name, 200 + i).resize((800, 800), Image.LANCZOS).save(ROOT / "plates" / f"{name}-empty.png", optimize=True)
-        render_dish(name, 200 + i).resize((800, 800), Image.LANCZOS).save(ROOT / "plates" / f"{name}-dish.png", optimize=True)
-    print("done →", ROOT)
+    print("done →", ROOT / "plates")
 
 
 if __name__ == "__main__":

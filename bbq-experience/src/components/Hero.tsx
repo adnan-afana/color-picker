@@ -1,6 +1,6 @@
 import type { SceneConfig } from '../config/types'
 import type { RegisterRef } from '../useElementRegistry'
-import { SiteHeader } from './SiteHeader'
+import { animatedIds, boxStyle } from '../sceneIndex'
 
 interface HeroProps {
   scene: SceneConfig
@@ -8,35 +8,35 @@ interface HeroProps {
 }
 
 /**
- * Full-screen hero with the charcoal grill. The skewers themselves live in
- * the overlay layer; here we only place invisible "slot" markers on the grill
- * that tell the engine where each skewer rests.
+ * Full-screen hero with the charcoal grill. Food that stays on the grill is
+ * drawn here; food that moves (and the basket lid) lives in the food layer,
+ * and only an invisible slot marks where it rests.
  */
 export function Hero({ scene, register }: HeroProps) {
+  const { moving, lids } = animatedIds(scene)
   return (
     <section className="hero" id="top" aria-labelledby="hero-title">
-      <div className="hero__media" aria-hidden="true">
+      <div className="hero__media">
         {/* Keeps the photo's aspect ratio so slot positions (in %) stay true. */}
         <div className="grill-stage">
           <img className="grill-stage__image" src={scene.assets.grill} alt="" draggable={false} />
           <img className="grill-stage__flames" src={scene.assets.flames} alt="" draggable={false} />
-          {scene.skewers.map((s) => (
-            <div
-              key={s.id}
-              ref={register(s.id, 'slot')}
-              className="grill-slot"
-              style={{
-                left: `${s.grill.x}%`,
-                top: `${s.grill.y}%`,
-                width: `${s.grill.width}%`,
-              }}
-            />
-          ))}
+          {scene.grillItems.map((item) => {
+            const style = boxStyle(scene, item.id)
+            if (!style) return null
+            if (moving.has(item.id) || lids.has(item.id)) {
+              return <div key={item.id} ref={register(`slot:${item.id}`)} className="grill-slot" style={style} />
+            }
+            return (
+              <div key={item.id} className={`grill-item grill-item--${item.kind}`} style={style}>
+                {item.images.metal && <img src={item.images.metal} alt="" draggable={false} />}
+                <img src={item.images.food ?? item.images.image} alt={item.alt ?? ''} draggable={false} />
+              </div>
+            )
+          })}
         </div>
       </div>
       <div className="hero__shade" aria-hidden="true" />
-
-      <SiteHeader scene={scene} />
 
       <h1 id="hero-title" className="hero__headline">
         {scene.hero.headline}

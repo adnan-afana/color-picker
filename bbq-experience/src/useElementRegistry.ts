@@ -1,36 +1,29 @@
 import { useCallback, useRef } from 'react'
-import type { SkewerElements } from './animation/choreography'
 
-export type ElementKey = keyof SkewerElements
-export type RegisterRef = (id: string, key: ElementKey) => (el: HTMLElement | null) => void
+export type RegisterRef = (key: string) => (el: HTMLElement | null) => void
 
 /**
- * Collects the DOM nodes each skewer needs (grill slot, overlay image, plate…)
- * from components spread across the page, keyed by skewer id.
+ * Collects the DOM nodes the animation drives (grill slots, food layers,
+ * plates…) from components spread across the page, keyed by name such as
+ * `slot:kebab-3` or `plate:kebab`.
  */
 export function useElementRegistry() {
-  const map = useRef(new Map<string, Partial<SkewerElements>>())
+  const map = useRef(new Map<string, HTMLElement>())
   const callbacks = useRef(new Map<string, (el: HTMLElement | null) => void>())
 
-  const register: RegisterRef = useCallback((id, key) => {
-    const cacheKey = `${id}:${key}`
-    let cb = callbacks.current.get(cacheKey)
+  const register: RegisterRef = useCallback((key) => {
+    let cb = callbacks.current.get(key)
     if (!cb) {
       cb = (el) => {
-        const entry = map.current.get(id) ?? {}
-        if (el) entry[key] = el
-        else delete entry[key]
-        map.current.set(id, entry)
+        if (el) map.current.set(key, el)
+        else map.current.delete(key)
       }
-      callbacks.current.set(cacheKey, cb)
+      callbacks.current.set(key, cb)
     }
     return cb
   }, [])
 
-  const get = useCallback((id: string): SkewerElements | undefined => {
-    const e = map.current.get(id)
-    return e?.skewer && e.slot && e.plate && e.plateVisual && e.dish && e.steam ? (e as SkewerElements) : undefined
-  }, [])
+  const get = useCallback((key: string) => map.current.get(key), [])
 
   return { register, get }
 }

@@ -1,33 +1,20 @@
 /**
  * Scene configuration schema.
  *
- * Everything a designer may want to tune lives here — image paths, layout
+ * Everything a designer may want to tune lives here: image paths, layout
  * positions and motion settings. The animation engine only reads these
- * values; it never hard-codes them. The default values live in
- * `public/config/scene.json` and the Animation Studio (phase 4) will
- * write overrides with the same shape.
+ * values; it never hard-codes them.
+ *
+ *  - `public/config/scene.json`       copy, images, dishes and the scroll sequence
+ *  - `public/config/grill-items.json` where each cut-out sits on the grill photo
+ *                                     (written by tools/prepare_grill_items.py)
  */
 
-/** [start, end] as a fraction (0–1) of a skewer's scroll range. */
+/** [start, end] as a fraction (0–1) of the pinned scroll. */
 export type Segment = [number, number]
 
-export interface Timing {
-  /** Skewer detaches, lifts and zooms to its peak scale. */
-  lift: Segment
-  /** Skewer travels along its curved path to the hover point above the plate. */
-  flight: Segment
-  /** Skewer slides sideways, as if pulled out from the meat. */
-  pull: Segment
-  /** Skewer fades out. */
-  fade: Segment
-  /** Finished dish fades in over the empty plate. */
-  reveal: Segment
-  /** Dish settles and steam appears. */
-  settle: Segment
-}
-
 export interface PathPoint {
-  /** Position between the lifted start (0) and the hover point (1). */
+  /** Position between the lifted start (0) and the hover point above the plate (1). */
   t: number
   /** Horizontal offset in % of viewport width. */
   x: number
@@ -35,68 +22,82 @@ export interface PathPoint {
   y: number
 }
 
-export interface SkewerConfig {
+/** Where a food item ends up on its plate. Offsets are fractions of the plate width. */
+export interface Placement {
   id: string
-  /** When false the skewer stays on the grill (used while building phase by phase). */
-  animate: boolean
-  /** Shifts this skewer's timing to stagger it against the others. */
-  timingOffset: number
-  images: {
-    skewer: string
-    plateEmpty: string
-    plateDish: string
-  }
-  dish: {
-    name: string
-    description: string
-    price: string
-  }
-  /** Resting position on the grill, in % of the grill image. */
-  grill: { x: number; y: number; width: number; rotation: number }
-  lift: {
-    /** Lift offset in % of viewport width / height. */
-    x: number
-    y: number
-    /** Scale reached at the top of the lift (1.2 = 120 %). */
-    peakScale: number
-    /** Extra rotation in degrees at the top of the lift. */
-    tilt: number
-  }
-  path: {
-    /** 0 = straight lines, ~1–1.5 = smooth arcs. */
-    curviness: number
-    via: PathPoint[]
-  }
-  arrival: {
-    /** Hover offset from the plate centre, as a fraction of plate width. */
-    x: number
-    y: number
-    /** Skewer width on arrival, as a fraction of plate width. */
-    width: number
-    rotation: number
-    /** Gentle mid-flight sway in degrees. */
-    sway: number
-  }
-  pull: {
-    /** Sideways travel as a fraction of plate width (negative = to the left). */
-    distance: number
-    /** Vertical drift during the pull, as a fraction of plate width. */
-    rise: number
-    tilt: number
-  }
-  /** Optional overrides applied on screens narrower than 768 px. */
-  mobile?: SkewerOverrides
+  x: number
+  y: number
+  /** Skewers: direction of the meat on the plate in degrees (0 = handle pointing down). Chicken: rotation. */
+  rotation: number
+  /** Skewers: length of the meat as a fraction of the plate width. */
+  length?: number
+  /** Whole pieces (chicken): width as a fraction of the plate width. */
+  width?: number
 }
 
-/** Layout and motion groups that can be overridden per breakpoint. */
-export type SkewerOverrides = {
-  [K in 'grill' | 'lift' | 'path' | 'arrival' | 'pull']?: Partial<SkewerConfig[K]>
+export interface StepTiming {
+  /** Camera pans back up to the grill (not needed for the first step). */
+  return?: Segment
+  /** Basket lid opens (half chicken only). */
+  open?: Segment
+  /** Food lifts slightly off the grill. */
+  lift: Segment
+  /** Food travels to its plate while the camera follows it down. */
+  flight: Segment
+  /** Food settles onto the plate. */
+  settle: Segment
+  /** Metal skewers slide out of the meat. */
+  slide?: Segment
+}
+
+export interface SequenceStep {
+  dish: string
+  items: Placement[]
+  /** Delay between items in the same step, as a fraction of the scroll. */
+  stagger: number
+  /** Id of the basket lid that opens before the food lifts. */
+  lid?: string
+  timing: StepTiming
+}
+
+export interface Dish {
+  id: string
+  name: string
+  description: string
+  price: string
+  plate: string
+}
+
+export interface GrillItemLayout {
+  /** [x0, y0, x1, y1] in pixels of the grill photo frame. */
+  box: [number, number, number, number]
+  /** Centre of the food as a fraction of the box. */
+  center?: [number, number]
+  /** Skewers: rows of the box occupied by meat [top, bottom] in px. */
+  meat?: [number, number]
+  /** Skewers: direction tip → handle in CSS degrees (0 = straight down). */
+  axis?: number
+}
+
+export interface GrillLayout {
+  frame: { width: number; height: number }
+  items: Record<string, GrillItemLayout>
+}
+
+export type GrillItemKind = 'skewer' | 'piece' | 'lid' | 'prop'
+
+export interface GrillItem {
+  id: string
+  kind: GrillItemKind
+  /** Skewers have `food` and `metal`; pieces have `food`; lids and props have `image`. */
+  images: { food?: string; metal?: string; image?: string }
+  alt?: string
 }
 
 export interface SceneConfig {
   version: number
   assets: {
-    /** Hero background photo. */
+    /** Hero background photo (clean grill, no food). */
     grill: string
     /** Flames-only transparent layer, same size as the grill photo (used for the flicker). */
     flames: string
@@ -110,14 +111,26 @@ export interface SceneConfig {
     order: { label: string; href: string }
   }
   platesSection: { title: string; subtitle: string }
+  /** Every cut-out on the grill, painted back to front. */
+  grillItems: GrillItem[]
+  dishes: Dish[]
   motion: {
-    /** Scroll smoothing in seconds (true/0 = locked to the scrollbar). */
+    /** Scroll smoothing in seconds (0 = locked to the scrollbar). */
     scrub: number
-    /** How long the plates stay pinned on desktop, in viewport heights. */
-    pinLength: number
-    /** Mobile: the animation completes when the plate centre reaches this fraction of the viewport height. */
-    mobileEndOffset: number
-    timing: Timing
+    /** Length of the pinned sequence, in viewport heights. */
+    scrollLength: { desktop: number; mobile: number }
+    /** Where the camera frames each plate: plate centre at this fraction of the viewport height. */
+    plateFocus: number
+    lift: {
+      /** Rise off the grill in % of viewport height (negative = up). */
+      y: number
+      scale: number
+    }
+    path: { curviness: number; via: PathPoint[] }
+    /** Lid opening angle in degrees. */
+    lidAngle: number
+    steps: SequenceStep[]
   }
-  skewers: SkewerConfig[]
+  /** Filled in at load time from grill-items.json. */
+  grillLayout: GrillLayout
 }
