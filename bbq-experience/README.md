@@ -33,45 +33,47 @@ Every image is a separate file in `public/assets/`. To swap one, save your image
 | Hero photo | `assets/hero/grill-hero.jpg` | 1672 × 941, empty grill with no food, text or logo |
 | Flame flicker layer | `assets/hero/flames.png` | Same size as the hero photo; only the flames, rest transparent |
 | Logo | `assets/brand/logo.png` | Transparent PNG |
-| Skewer meat | `assets/grill/{kebab,tawook}-N-food.png` | Transparent; only the meat |
-| Skewer metal | `assets/grill/{kebab,tawook}-N-metal.png` | Transparent; tip, handle and the rod through the meat. Same canvas as the meat image. |
-| Half chicken | `assets/grill/chicken.png` | Transparent; no basket wires |
+| Skewer meat | `assets/grill/{kebab,tawook}-N-food.png` | Upright (tip up), transparent; only the meat |
+| Skewer metal | `assets/grill/{kebab,tawook}-N-metal.png` | Same canvas as the meat; tip, handle and the rod through the meat |
+| Half chicken | `assets/grill/chicken.png` | Transparent |
 | Basket lid and base | `assets/grill/basket-lid.png`, `basket-base.png` | Transparent; the base includes the handle |
-| Empty plates | `assets/plates/{beef,tawook,chicken}-empty.png` | Square, transparent, viewed from above |
+| Empty plates | `assets/plates/{kebab,tawook,chicken}-empty.webp` | The plate before the food arrives |
+| Complete dishes | `assets/plates/{kebab,tawook,chicken}-full.webp` | Same canvas as the empty plate |
 
 Skewers are numbered from left to right on the grill:
 - **Tawook:** 1 to 3. Numbers 2 and 3 move.
 - **Kebab:** 1 to 4. Numbers 3 and 4 move.
 
-There are no separate "finished dish" images. The food that lands on the plate is the finished dish, so nothing is duplicated.
+### Where the images come from
 
-### Where the food images come from
+The food comes from the restaurant's own photos in `tools/reference/supplied/`, processed by `tools/prepare_supplied_food.py`:
 
-The food was cut out of the approved composite (`tools/reference/grill-food-reference.png`) by `tools/prepare_grill_items.py`, which also writes `public/config/grill-items.json`. That file records where each cut-out sits on the grill photo.
+- **Skewers and half chicken:** the isolated photos are placed on the grill in the approved arrangement (`tools/reference/grill-food-reference.png`). Each skewer is split into a meat layer and a metal layer, so the metal can slide out on the plate.
+- **Kebab and shish tawook plates:**
+  - `-full` is the complete dish photo, cut out of its marble background.
+  - `-empty` is the same plate with everything on it removed.
+  - Removing only the protein (and keeping the rice and sides) could not be done convincingly. So the arriving food lands exactly where it sits in the photo and dissolves into the complete photo.
+- **Half-chicken plate:** no complete dish photo was supplied. The chicken lands on the same black plate, and `-full` is composed from exactly where it lands.
 
-To replace the food with real photos:
-- **Same framing:** keep each image's size and position on the 1672 × 941 grill frame. Then the grill layout stays correct.
-- **Different framing:** update the boxes in `grill-items.json`.
+The script also writes:
+- `public/config/grill-items.json`: where each layer sits on the grill.
+- `public/config/dish-layout.json`: where the food lies in each dish photo, which the landing spots are taken from.
 
-The basket is redrawn as clean wire layers (`tools/basket_geometry.py`), because the photographed wires couldn't be separated from the chicken.
+The basket is drawn as clean wire layers by `tools/prepare_basket.py`.
 
-### Other generated assets
+The hero photo, flame layer and logo were cut out of the first approved hero mock-up by `tools/prepare_hero_assets.py`. The logo was keyed out of a screenshot, so swap in the original logo file when you have it.
 
-- **Hero photo, flame layer and logo:** cut out of the first approved hero mock-up (`tools/reference/hero-reference.png`) by `tools/prepare_hero_assets.py`. The logo was keyed out of a screenshot, so swap in the original logo file when you have it.
-- **Empty plates:** still placeholders, rendered by `tools/generate_placeholders.py` (`npm run assets`).
-
-The asset scripts need Python with these packages:
+To rebuild all the generated layers, run `npm run assets`. It needs Python with these packages:
 - numpy
 - pillow
-- scipy
-- opencv-python-headless
+- opencv-contrib-python-headless
 - rembg
 
 ## Tuning the scene (no code)
 
 All copy, images and motion settings live in **`public/config/scene.json`**, separate from the animation logic:
 - **Header and headline:** `hero` holds the header links, the headline and the ORDER NOW destination.
-- **Dishes:** `dishes` holds each dish's name, description, price and plate image.
+- **Dishes:** `dishes` holds each dish's name, description, price, empty plate and complete dish photo.
 - **Grill items:** `grillItems` lists every cut-out on the grill, from back to front.
 
 ### `motion`
@@ -91,7 +93,7 @@ All copy, images and motion settings live in **`public/config/scene.json`**, sep
 | Setting | Meaning |
 | --- | --- |
 | `dish` | Which plate it goes to. |
-| `items` | What moves, and where it lands. `x`, `y` are offsets from the plate centre as fractions of the plate width. `rotation` is the angle on the plate. `length` (skewers) or `width` (chicken) is the size relative to the plate. |
+| `items` | What moves, by id. Landing spots come from `dish-layout.json` (measured on the dish photo). To nudge one, add any of these here: `x`, `y` (offsets from the plate centre, as fractions of the plate width), `rotation`, `length` (skewers), `thickness` (skewers) or `width` (chicken). |
 | `stagger` | Delay between the two skewers of the same dish. |
 | `lid` | The basket lid to open first (half chicken only). |
 | `timing` | When each phase starts and ends, as fractions of the whole sequence (see below). The gaps between steps are the pauses. |
@@ -103,13 +105,17 @@ The phases in `timing` are:
 - `flight`: the food travels to its plate while the camera follows.
 - `settle`: the food lands on the plate.
 - `slide`: the metal skewers slide out.
+- `reveal`: the arriving food dissolves into the complete dish photo.
 
 ## How it works
 
 - **Journey** (`src/App.tsx`): the hero and the plates sit in one "track" that is pinned while you scroll. A camera value moves that track between the grill and each plate, so the lift and the landing are both on screen.
-- **Header**: it sits outside the track, above the food, so moving food never covers the navigation. The Menu link jumps to the end of the sequence, where every dish is plated.
-- **Food layer** (`src/components/FoodLayer.tsx`): moving food and the basket lid live in a fixed layer above both sections, so nothing is clipped in transit. Food that stays on the grill is drawn in the hero itself.
+- **Header and food layer**: they are rendered at the top of the page (a React portal), outside the pinned journey.
+  - Pinning gives the journey a transform and overflow clipping. Anything fixed inside it would be cropped to the journey and drift once the pin ends, which is what cut the chicken off before.
+  - The header stays above the food, so moving food never covers the navigation.
+  - The Menu link jumps to the end of the sequence, where every dish is plated.
+- **Food layer** (`src/components/FoodLayer.tsx`): moving food and the basket lid live here. While it travels, each item is kept fully on screen. Food that stays on the grill is drawn in the hero itself.
 - **Live anchors**: each frame, the engine measures every grill slot and plate and rebuilds the curved path between them with MotionPathPlugin. Landing spots therefore come from the real plate elements, and stay aligned at any screen size or on resize.
 - **Scroll timeline** (`src/animation/choreography.ts`): one scrubbed GSAP timeline drives the camera, the lid and each item's progress. Reversing the scroll plays the same timeline backwards, so the reverse is exact.
-- **Pure motion maths** (`src/animation/pose.ts`): turns progress values into position, scale, rotation, shadows and the skewer slide. It never touches the DOM.
-- **Reduced motion**: with `prefers-reduced-motion`, nothing is pinned or moves. The dishes are shown already plated.
+- **Pure motion maths** (`src/animation/pose.ts`): turns progress values into position, scale, rotation, thickness, shadows and the skewer slide. It never touches the DOM.
+- **Reduced motion**: with `prefers-reduced-motion`, nothing is pinned or moves. The complete dishes are shown, and the empty basket stays closed on the grill.

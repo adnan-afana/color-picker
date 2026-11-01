@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "assets": {
     "grill": "assets/hero/grill-hero.jpg",
     "flames": "assets/hero/flames.png",
@@ -117,21 +117,24 @@
       "name": "Beef Kebab",
       "description": "Prime beef shoulder, onion and seven-spice, seared over oak charcoal.",
       "price": "$24",
-      "plate": "assets/plates/beef-empty.png"
+      "plate": "assets/plates/kebab-empty.webp",
+      "full": "assets/plates/kebab-full.webp"
     },
     {
       "id": "tawook",
       "name": "Shish Tawook",
       "description": "Chicken breast in garlic, lemon and yoghurt marinade with charred peppers.",
       "price": "$21",
-      "plate": "assets/plates/tawook-empty.png"
+      "plate": "assets/plates/tawook-empty.webp",
+      "full": "assets/plates/tawook-full.webp"
     },
     {
       "id": "chicken",
       "name": "Half Chicken",
       "description": "Boneless thigh, sumac and smoked paprika, basted in charcoal butter.",
       "price": "$22",
-      "plate": "assets/plates/chicken-empty.png"
+      "plate": "assets/plates/chicken-empty.webp",
+      "full": "assets/plates/chicken-full.webp"
     }
   ],
   "motion": {
@@ -162,18 +165,10 @@
         "stagger": 0.015,
         "items": [
           {
-            "id": "kebab-3",
-            "x": -0.15,
-            "y": -0.01,
-            "rotation": -58,
-            "length": 0.66
+            "id": "kebab-3"
           },
           {
-            "id": "kebab-4",
-            "x": 0.14,
-            "y": 0.03,
-            "rotation": -58,
-            "length": 0.66
+            "id": "kebab-4"
           }
         ],
         "timing": {
@@ -191,7 +186,11 @@
           ],
           "slide": [
             0.21,
-            0.27
+            0.26
+          ],
+          "reveal": [
+            0.25,
+            0.29
           ]
         }
       },
@@ -200,40 +199,36 @@
         "stagger": 0.015,
         "items": [
           {
-            "id": "tawook-2",
-            "x": -0.15,
-            "y": -0.01,
-            "rotation": -58,
-            "length": 0.66
+            "id": "tawook-2"
           },
           {
-            "id": "tawook-3",
-            "x": 0.14,
-            "y": 0.03,
-            "rotation": -58,
-            "length": 0.66
+            "id": "tawook-3"
           }
         ],
         "timing": {
           "return": [
-            0.3,
-            0.38
+            0.31,
+            0.39
           ],
           "lift": [
-            0.38,
-            0.42
+            0.39,
+            0.43
           ],
           "flight": [
-            0.41,
-            0.55
+            0.42,
+            0.56
           ],
           "settle": [
-            0.55,
-            0.59
+            0.56,
+            0.6
           ],
           "slide": [
-            0.59,
+            0.6,
             0.65
+          ],
+          "reveal": [
+            0.64,
+            0.68
           ]
         }
       },
@@ -243,32 +238,32 @@
         "lid": "basket-lid",
         "items": [
           {
-            "id": "chicken",
-            "x": 0.0,
-            "y": 0.0,
-            "rotation": -6,
-            "width": 0.84
+            "id": "chicken"
           }
         ],
         "timing": {
           "return": [
-            0.68,
-            0.76
+            0.7,
+            0.77
           ],
           "open": [
-            0.76,
-            0.81
+            0.77,
+            0.82
           ],
           "lift": [
-            0.81,
-            0.85
+            0.82,
+            0.86
           ],
           "flight": [
-            0.84,
+            0.85,
             0.95
           ],
           "settle": [
             0.95,
+            0.98
+          ],
+          "reveal": [
+            0.97,
             1.0
           ]
         }

@@ -1,0 +1,51 @@
+{
+  "kebab": {
+    "aspect": 1.1505,
+    "items": [
+      {
+        "x": -0.1894,
+        "y": 0.1546,
+        "rotation": -47.5,
+        "length": 0.5706,
+        "thickness": 0.1591
+      },
+      {
+        "x": -0.0853,
+        "y": 0.0666,
+        "rotation": -45.6,
+        "length": 0.5515,
+        "thickness": 0.1484
+      }
+    ]
+  },
+  "tawook": {
+    "aspect": 1.1435,
+    "items": [
+      {
+        "x": -0.2173,
+        "y": 0.145,
+        "rotation": -45.5,
+        "length": 0.5298,
+        "thickness": null
+      },
+      {
+        "x": -0.0809,
+        "y": 0.0062,
+        "rotation": -45.5,
+        "length": 0.5298,
+        "thickness": null
+      }
+    ]
+  },
+  "chicken": {
+    "aspect": 1.1435,
+    "items": [
+      {
+        "x": 0.0,
+        "y": 0.015,
+        "rotation": -6,
+        "width": 0.6
+      }
+    ]
+  }
+}

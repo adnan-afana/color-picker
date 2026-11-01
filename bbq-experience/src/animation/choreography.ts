@@ -77,21 +77,24 @@ export function createChoreography({ scene, get, debugSvg }: ChoreographyOptions
   const { motion } = scene
 
   const movers: Mover[] = motion.steps.flatMap((step, i) =>
-    step.items.flatMap((place) => {
-      const el = get(`item:${place.id}`)
-      const shadow = get(`shadow:${place.id}`)
-      const slot = get(`slot:${place.id}`)
+    step.items.flatMap((item, k) => {
+      const el = get(`item:${item.id}`)
+      const shadow = get(`shadow:${item.id}`)
+      const slot = get(`slot:${item.id}`)
       const plate = get(`plate:${step.dish}`)
-      const layout = scene.grillLayout.items[place.id]
-      if (!el || !shadow || !slot || !plate || !layout) return []
+      const layout = scene.grillLayout.items[item.id]
+      // Landing spot measured from the dish photo, unless scene.json overrides it.
+      const measured = scene.dishLayout[step.dish]?.items[k]
+      if (!el || !shadow || !slot || !plate || !layout || !measured) return []
+      const { id: _id, ...overrides } = item
       return [{
         step: i,
         dish: step.dish,
-        place,
+        place: { ...measured, ...overrides },
         layout,
         progress: emptyItemProgress(),
         el,
-        metal: get(`metal:${place.id}`),
+        metal: get(`metal:${item.id}`),
         shadow,
         slot,
         plate,
@@ -110,7 +113,10 @@ export function createChoreography({ scene, get, debugSvg }: ChoreographyOptions
     id: d.id,
     visual: get(`plateVisual:${d.id}`),
     steam: get(`steam:${d.id}`),
+    full: get(`full:${d.id}`),
   }))
+  /** Per step: the arriving food dissolves into the complete dish photo (0–1). */
+  const reveals = motion.steps.map(() => ({ v: 0 }))
 
   /** Camera position as a stop index: 0 grill, 1 first plate, 2 grill, 3 second plate… */
   const camera = { v: 0 }
@@ -144,16 +150,23 @@ export function createChoreography({ scene, get, debugSvg }: ChoreographyOptions
       const i = Math.min(stops.length - 2, Math.floor(camera.v))
       cam = stops[i] + (stops[i + 1] - stops[i]) * (camera.v - i)
     }
-    const camTransform = cam ? `translate3d(0, ${-cam}px, 0)` : ''
-    track.style.transform = camTransform
-    if (header) header.style.transform = camTransform
+    track.style.transform = cam ? `translate3d(0, ${-cam}px, 0)` : ''
+    // The header lives outside the pinned journey (so food can pass under it
+    // without being clipped); while cinematic it is fixed and follows the
+    // journey and the camera, otherwise it simply scrolls with the page.
+    if (header) {
+      header.dataset.mode = cinematic ? 'cinematic' : 'static'
+      header.style.transform = cinematic
+        ? `translate3d(0, ${journey.getBoundingClientRect().top - cam}px, 0)`
+        : ''
+    }
 
     // 2. Read every anchor, then write every style.
     const frames = movers.map((m) => {
       const slot = measure(m.slot)
       const plate = measure(m.plate)
       const plan = planFlight(m.layout, m.place, slot, plate, vp, motion)
-      return { m, plan, pose: computeFoodPose(m.layout, m.progress, slot, plan, motion) }
+      return { m, plan, pose: computeFoodPose(m.progress, slot, plan, motion, vp) }
     })
     const lidFrames = [...lids.values()].map((l) => ({ l, slot: measure(l.slot) }))
 
@@ -162,11 +175,14 @@ export function createChoreography({ scene, get, debugSvg }: ChoreographyOptions
       sizeTo(m.el, m.size, pose.w, pose.h)
       m.el.style.transform =
         `translate3d(${pose.x}px, ${pose.y}px, 0) translate(-50%, -50%) ` +
-        `rotate(${pose.rotation}deg) scale(${pose.scale})`
+        `rotate(${pose.rotation}deg) scale(${pose.scale * pose.stretch}, ${pose.scale})`
       m.el.dataset.state = m.progress.lift > 0.001 ? 'moving' : 'resting'
+      const reveal = reveals[m.step].v
+      m.el.style.opacity = String(1 - reveal)
+      m.el.style.visibility = reveal >= 0.999 ? 'hidden' : 'visible'
       m.shadow.style.opacity = String(pose.shadow)
       if (m.metal) {
-        m.metal.style.transform = `translate3d(${pose.metalX}px, ${pose.metalY}px, 0)`
+        m.metal.style.transform = `translate3d(0, ${pose.metalY}px, 0)`
         m.metal.style.opacity = String(pose.metalOpacity)
         m.metal.style.visibility = pose.metalOpacity <= 0.001 ? 'hidden' : 'visible'
       }
@@ -189,8 +205,11 @@ export function createChoreography({ scene, get, debugSvg }: ChoreographyOptions
     for (const d of dishes) {
       const own = movers.filter((m) => m.dish === d.id)
       const settle = own.length ? Math.min(...own.map((m) => Math.min(1, Math.max(0, m.progress.settle)))) : 0
+      const step = motion.steps.findIndex((s) => s.dish === d.id)
+      const reveal = step >= 0 ? reveals[step].v : 1
       if (d.visual) d.visual.style.transform = `scale(${1 - 0.018 * Math.sin(Math.PI * settle)})`
       if (d.steam) d.steam.style.opacity = String(settle)
+      if (d.full) d.full.style.opacity = String(reveal)
     }
     if (debugSvg) debugSvg.innerHTML = debug
   }
@@ -216,6 +235,7 @@ export function createChoreography({ scene, get, debugSvg }: ChoreographyOptions
           if (seg) addSegment(tl, m.progress, { [phase]: 1, ease: PHASE_EASE[phase] }, seg, offset)
         })
       })
+    if (timing.reveal) addSegment(tl, reveals[index], { v: 1, ease: 'power1.inOut' }, timing.reveal)
   }
 
   const onNavClick = (e: MouseEvent) => {
@@ -245,6 +265,7 @@ export function createChoreography({ scene, get, debugSvg }: ChoreographyOptions
         cinematic = false
         journey.dataset.mode = 'static'
         movers.forEach((m) => Object.assign(m.progress, finalItemProgress()))
+        reveals.forEach((r) => (r.v = 1))
         // The empty basket stays closed on the grill.
         lids.forEach((l) => (l.open.v = 0))
         camera.v = 0
@@ -254,6 +275,7 @@ export function createChoreography({ scene, get, debugSvg }: ChoreographyOptions
       cinematic = true
       journey.dataset.mode = 'cinematic'
       movers.forEach((m) => Object.assign(m.progress, emptyItemProgress()))
+      reveals.forEach((r) => (r.v = 0))
       lids.forEach((l) => (l.open.v = 0))
       camera.v = 0
 

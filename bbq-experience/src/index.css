@@ -184,6 +184,7 @@ html {
   width: 100%;
   height: 100%;
   max-width: none;
+  object-fit: contain;
 }
 
 /* Soft contact shadow so the food sits on the grate rather than floating above it. */
@@ -323,9 +324,10 @@ html {
 
 @media (max-width: 767px) {
   /* Keep the whole grill readable instead of zooming into the middle of it. */
+  /* Narrow enough that the whole arrangement, basket to last kebab, is on screen. */
   .grill-stage {
     top: 46%;
-    width: 190vw;
+    width: 120vw;
   }
 
   .hero__shade {
@@ -434,16 +436,22 @@ html {
   overflow: hidden;
 }
 
-.journey[data-mode='cinematic'] .journey__track,
-.journey[data-mode='cinematic'] .journey__header {
+.journey[data-mode='cinematic'] .journey__track {
   will-change: transform;
 }
 
-/* Header sits outside the panning track so food never covers the navigation. */
-.journey__header {
+/* The header and the food layer are rendered at the top of the page, outside
+   the pinned journey, so its transform and overflow clipping never crop them.
+   The header stays above the food so moving food never covers navigation. */
+.header-layer {
   position: absolute;
   inset: 0 0 auto;
   z-index: 50;
+}
+
+.header-layer[data-mode='cinematic'] {
+  position: fixed;
+  will-change: transform;
 }
 
 .food-layer {
@@ -482,6 +490,7 @@ html {
   width: 100%;
   height: 100%;
   max-width: none;
+  object-fit: contain;
 }
 
 .food__metal {
@@ -570,8 +579,9 @@ html {
 
 .plate-card__plate {
   position: relative;
-  width: min(100%, 40svh);
-  aspect-ratio: 1;
+  width: min(100%, 50svh);
+  max-width: 100%;
+  /* aspect-ratio comes from the dish photo (set inline) */
 }
 
 .plate-card__visual {
@@ -586,6 +596,12 @@ html {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+/* Complete dish photo, revealed as the arriving food dissolves into it. */
+.plate-card__full {
+  opacity: 0;
+  will-change: opacity;
 }
 
 .plate-card__body {
@@ -692,7 +708,7 @@ html {
   }
 
   .plate-card__plate {
-    width: min(82vw, 380px);
+    width: min(90vw, 440px);
   }
 }
 

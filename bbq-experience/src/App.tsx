@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { createChoreography } from './animation/choreography'
 import { loadScene } from './config/loadScene'
 import type { SceneConfig } from './config/types'
@@ -32,9 +33,6 @@ export default function App() {
     <main>
       {/* The journey pins while the camera pans between the grill and each plate. */}
       <div className="journey" ref={register('journey')}>
-        <div className="journey__header" ref={register('header')}>
-          <SiteHeader scene={scene} />
-        </div>
         <div className="journey__track" ref={register('track')}>
           <Hero scene={scene} register={register} />
 
@@ -46,20 +44,32 @@ export default function App() {
             </header>
             <div className="plates__grid">
               {scene.dishes.map((d) => (
-                <PlateCard key={d.id} dish={d} register={register} />
+                <PlateCard key={d.id} dish={d} aspect={scene.dishLayout[d.id]?.aspect ?? 1} register={register} />
               ))}
             </div>
           </section>
         </div>
-        <FoodLayer
-          scene={scene}
-          register={register}
-          debug={debug}
-          debugRef={(el) => {
-            debugSvg.current = el
-          }}
-        />
       </div>
+
+      {/* Header and moving food sit at the top of the page, outside the pinned
+          journey: pinning gives the journey a transform and overflow clipping,
+          which would otherwise trap and crop anything inside it. */}
+      {createPortal(
+        <>
+          <FoodLayer
+            scene={scene}
+            register={register}
+            debug={debug}
+            debugRef={(el) => {
+              debugSvg.current = el
+            }}
+          />
+          <div className="header-layer" ref={register('header')}>
+            <SiteHeader scene={scene} />
+          </div>
+        </>,
+        document.body,
+      )}
 
       <section className="closing" id="contact">
         <h2>Reserve your table</h2>
