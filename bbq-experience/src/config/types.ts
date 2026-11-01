@@ -95,8 +95,20 @@ export type SkewerOverrides = {
 
 export interface SceneConfig {
   version: number
-  assets: { grill: string }
-  hero: { eyebrow: string; title: string; subtitle: string }
+  assets: {
+    /** Hero background photo. */
+    grill: string
+    /** Flames-only transparent layer, same size as the grill photo (used for the flicker). */
+    flames: string
+    logo: string
+  }
+  hero: {
+    headline: string
+    logoAlt: string
+    /** Header links: an in-page anchor (#menu) or a full URL. */
+    nav: { label: string; href: string }[]
+    order: { label: string; href: string }
+  }
   platesSection: { title: string; subtitle: string }
   motion: {
     /** Scroll smoothing in seconds (true/0 = locked to the scrollbar). */

@@ -1,5 +1,6 @@
 import type { SceneConfig } from '../config/types'
 import type { RegisterRef } from '../useElementRegistry'
+import { SiteHeader } from './SiteHeader'
 
 interface HeroProps {
   scene: SceneConfig
@@ -13,19 +14,12 @@ interface HeroProps {
  */
 export function Hero({ scene, register }: HeroProps) {
   return (
-    <section className="hero" aria-labelledby="hero-title">
-      <div className="hero__copy">
-        <p className="eyebrow">{scene.hero.eyebrow}</p>
-        <h1 id="hero-title" className="hero__title">
-          {scene.hero.title}
-        </h1>
-        <p className="hero__subtitle">{scene.hero.subtitle}</p>
-      </div>
-
-      <div className="hero__stage-wrap">
+    <section className="hero" id="top" aria-labelledby="hero-title">
+      <div className="hero__media" aria-hidden="true">
+        {/* Keeps the photo's aspect ratio so slot positions (in %) stay true. */}
         <div className="grill-stage">
-          <img className="grill-stage__image" src={scene.assets.grill} alt="Charcoal grill with glowing coals" />
-          <div className="grill-stage__glow" aria-hidden="true" />
+          <img className="grill-stage__image" src={scene.assets.grill} alt="" draggable={false} />
+          <img className="grill-stage__flames" src={scene.assets.flames} alt="" draggable={false} />
           {scene.skewers.map((s) => (
             <div
               key={s.id}
@@ -36,15 +30,17 @@ export function Hero({ scene, register }: HeroProps) {
                 top: `${s.grill.y}%`,
                 width: `${s.grill.width}%`,
               }}
-              aria-hidden="true"
             />
           ))}
         </div>
       </div>
+      <div className="hero__shade" aria-hidden="true" />
 
-      <div className="scroll-cue" aria-hidden="true">
-        <span>Scroll</span>
-      </div>
+      <SiteHeader scene={scene} />
+
+      <h1 id="hero-title" className="hero__headline">
+        {scene.hero.headline}
+      </h1>
     </section>
   )
 }

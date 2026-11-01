@@ -2,7 +2,6 @@
 Procedural placeholder renderer for the BBQ prototype.
 
 Produces shaded, photo-styled stand-ins for every replaceable image:
-  public/assets/grill.jpg
   public/assets/skewers/{beef,tawook,chicken}.png        (transparent)
   public/assets/plates/{beef,tawook,chicken}-empty.png   (transparent)
   public/assets/plates/{beef,tawook,chicken}-dish.png    (transparent)
@@ -438,8 +437,6 @@ def render_grill(seed=7, W=2400, H=1350) -> Image.Image:
 def main():
     (ROOT / "skewers").mkdir(parents=True, exist_ok=True)
     (ROOT / "plates").mkdir(parents=True, exist_ok=True)
-    print("grill…")
-    render_grill().save(ROOT / "grill.jpg", quality=88)
     for i, name in enumerate(["beef", "tawook", "chicken"]):
         print(name, "…")
         render_skewer(name, 100 + i).save(ROOT / "skewers" / f"{name}.png", optimize=True)

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&family=Oswald:wght@500;600;700&display=swap');
 
 :root {
   --ink: #f4ebe1;
@@ -10,6 +10,11 @@
   --char-2: #140e0a;
   --line: rgba(244, 235, 225, 0.12);
   --serif: 'Cormorant Garamond', 'Times New Roman', serif;
+  --condensed: 'Oswald', 'Arial Narrow', 'Roboto Condensed', sans-serif;
+  --warm-white: #f7efe4;
+  --order: #c4401a;
+  --order-hover: #d94e22;
+  --hero-black: #050302;
   --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   color-scheme: dark;
 }
@@ -90,81 +95,81 @@ h3 {
 }
 
 /* ------------------------------------------------------------------ hero */
+/* Measurements follow the approved 1672 × 941 reference (values in vw = px / 16.72). */
+
+html {
+  scroll-padding-top: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
 
 .hero {
   position: relative;
   height: 100vh;
   height: 100svh;
-  min-height: 560px;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  grid-template-columns: minmax(0, 1fr);
+  min-height: 520px;
   overflow: hidden;
-  background:
-    radial-gradient(120% 80% at 50% 85%, rgba(194, 65, 12, 0.28), transparent 60%),
-    radial-gradient(60% 50% at 50% 0%, rgba(255, 255, 255, 0.04), transparent 70%),
-    var(--char);
+  background: var(--hero-black);
 }
 
-.hero__copy {
-  position: relative;
-  z-index: 2;
-  padding: clamp(1.5rem, 5vh, 3.5rem) clamp(1rem, 5vw, 4rem) 0;
-  text-align: center;
+.hero__media {
+  position: absolute;
+  inset: 0;
 }
 
-.hero__title {
-  font-size: clamp(2.4rem, 6.2vw, 5.4rem);
-  line-height: 0.98;
-}
-
-.hero__subtitle {
-  margin: 1rem auto 0;
-  max-width: 34rem;
-  color: var(--ink-soft);
-  font-size: clamp(0.9rem, 1.3vw, 1.05rem);
-  line-height: 1.6;
-}
-
-.hero__stage-wrap {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 0;
-}
-
-/* The grill keeps the image's aspect ratio so slot positions (in %) stay true. */
+/* Covers the hero like background-size: cover, but as a real box so the
+   skewer slots (in % of the photo) line up with the grill at any size. */
 .grill-stage {
-  position: relative;
-  aspect-ratio: 16 / 9;
-  width: min(96vw, calc((100svh - 13rem) * 16 / 9));
-  flex: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100%, 100svh * 1672 / 941);
+  aspect-ratio: 1672 / 941;
+  transform: translate(-50%, -50%);
 }
 
-.grill-stage__image {
+.grill-stage__image,
+.grill-stage__flames {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  -webkit-mask-image: radial-gradient(75% 80% at 50% 55%, #000 62%, transparent 100%);
-  mask-image: radial-gradient(75% 80% at 50% 55%, #000 62%, transparent 100%);
+  max-width: none;
 }
 
-.grill-stage__glow {
-  position: absolute;
-  inset: 12% 8% 6%;
-  background: radial-gradient(60% 55% at 50% 60%, rgba(255, 110, 30, 0.35), transparent 70%);
+/* The photo's own flames, brightened in slow, uneven waves that travel along the grill. */
+.grill-stage__flames {
   mix-blend-mode: screen;
+  opacity: 0.55;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, rgba(0, 0, 0, 0.15) 18%, #000 33%, rgba(0, 0, 0, 0.25) 52%, #000 68%, rgba(0, 0, 0, 0.1) 84%, #000 100%);
+  mask-image: linear-gradient(90deg, #000 0%, rgba(0, 0, 0, 0.15) 18%, #000 33%, rgba(0, 0, 0, 0.25) 52%, #000 68%, rgba(0, 0, 0, 0.1) 84%, #000 100%);
+  -webkit-mask-size: 260% 100%;
+  mask-size: 260% 100%;
+  animation:
+    flame-drift 7s linear infinite,
+    flame-flicker 2.3s steps(1, end) infinite;
   pointer-events: none;
-  animation: ember-flicker 3.2s ease-in-out infinite alternate;
 }
 
-@keyframes ember-flicker {
-  0% { opacity: 0.55; }
-  30% { opacity: 0.85; }
-  55% { opacity: 0.65; }
-  80% { opacity: 1; }
-  100% { opacity: 0.7; }
+@keyframes flame-drift {
+  from { -webkit-mask-position: 0% 0; mask-position: 0% 0; }
+  to { -webkit-mask-position: 260% 0; mask-position: 260% 0; }
+}
+
+@keyframes flame-flicker {
+  0% { opacity: 0.5; }
+  9% { opacity: 0.72; }
+  17% { opacity: 0.42; }
+  31% { opacity: 0.66; }
+  44% { opacity: 0.55; }
+  58% { opacity: 0.8; }
+  67% { opacity: 0.48; }
+  81% { opacity: 0.7; }
+  92% { opacity: 0.58; }
 }
 
 .grill-slot {
@@ -174,32 +179,233 @@ h3 {
   pointer-events: none;
 }
 
-.scroll-cue {
+/* Strong black behind the header, soft black over the front panel. */
+.hero__shade {
   position: absolute;
-  left: 50%;
-  bottom: 1.25rem;
-  transform: translateX(-50%);
-  z-index: 2;
-  font-size: 0.65rem;
-  letter-spacing: 0.4em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(5, 3, 2, 0.92) 0%, rgba(5, 3, 2, 0.7) 7%, rgba(5, 3, 2, 0.3) 14%, rgba(5, 3, 2, 0) 22%),
+    linear-gradient(0deg, rgba(5, 3, 2, 0.85) 0%, rgba(5, 3, 2, 0.45) 14%, rgba(5, 3, 2, 0) 30%);
 }
 
-.scroll-cue::after {
-  content: '';
+/* ---------------------------------------------------------------- header */
+
+.site-header {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 3.35vw, 3.5rem);
+  padding: clamp(8px, 0.55vw, 12px) max(16px, 2.8vw) 0 max(16px, 3.1vw);
+}
+
+.site-header__logo {
+  margin-right: auto;
   display: block;
-  width: 1px;
-  height: 28px;
-  margin: 0.5rem auto 0;
-  background: linear-gradient(var(--ink-faint), transparent);
-  animation: cue 1.8s ease-in-out infinite;
+  flex: none;
+  line-height: 0;
 }
 
-@keyframes cue {
-  0%, 100% { transform: scaleY(0.4); transform-origin: top; opacity: 0.4; }
-  50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+.site-header__logo img {
+  width: clamp(132px, 15.4vw, 300px);
+  height: auto;
 }
+
+.site-nav__list {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 3.8vw, 4rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-nav a,
+.order-button {
+  font-family: var(--condensed);
+  font-weight: 500;
+  font-size: clamp(15px, 1.45vw, 26px);
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--warm-white);
+}
+
+.site-nav a {
+  position: relative;
+  padding-block: 0.4em;
+}
+
+.site-nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--order);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+
+.site-nav a:hover::after,
+.site-nav a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.order-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  min-width: clamp(132px, 13.6vw, 240px);
+  height: clamp(42px, 4.2vw, 74px);
+  padding: 0 1.2em;
+  border-radius: 3px;
+  background: var(--order);
+  box-shadow: 0 8px 24px -10px rgba(196, 64, 26, 0.8);
+  transition: background-color 0.2s ease;
+}
+
+.order-button:hover {
+  background: var(--order-hover);
+}
+
+.site-nav a:focus-visible,
+.order-button:focus-visible,
+.site-header__logo:focus-visible,
+.menu-toggle:focus-visible {
+  outline: 2px solid var(--warm-white);
+  outline-offset: 4px;
+}
+
+.menu-toggle {
+  display: none;
+}
+
+/* -------------------------------------------------------------- headline */
+
+.hero__headline {
+  position: absolute;
+  z-index: 2;
+  left: max(16px, 3.3vw);
+  right: max(16px, 3.3vw);
+  bottom: 6.2%;
+  margin: 0;
+  font-family: var(--condensed);
+  font-weight: 700;
+  font-size: clamp(2.75rem, 4.9vw, 6.2rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--warm-white);
+  white-space: nowrap;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 767px) {
+  /* Keep the whole grill readable instead of zooming into the middle of it. */
+  .grill-stage {
+    top: 46%;
+    width: 190vw;
+  }
+
+  .hero__shade {
+    background:
+      linear-gradient(180deg, rgba(5, 3, 2, 0.95) 0%, rgba(5, 3, 2, 0.6) 12%, rgba(5, 3, 2, 0) 30%),
+      linear-gradient(0deg, rgba(5, 3, 2, 0.95) 0%, rgba(5, 3, 2, 0.6) 24%, rgba(5, 3, 2, 0) 42%);
+  }
+
+  .site-header {
+    gap: 12px;
+    padding-top: 12px;
+  }
+
+  .order-button {
+    min-width: 0;
+    height: 40px;
+    padding: 0 14px;
+    font-size: 15px;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 0 11px;
+    border: 1px solid rgba(247, 239, 228, 0.25);
+    border-radius: 3px;
+    background: rgba(5, 3, 2, 0.4);
+    cursor: pointer;
+  }
+
+  .menu-toggle span {
+    display: block;
+    height: 2px;
+    background: var(--warm-white);
+    transition: transform 0.25s ease, opacity 0.2s ease;
+  }
+
+  .site-header[data-open] .menu-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .site-header[data-open] .menu-toggle span:nth-child(2) { opacity: 0; }
+  .site-header[data-open] .menu-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .site-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
+  }
+
+  .site-header[data-open] .site-nav {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .site-nav__list {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    margin: 8px 16px 0;
+    padding: 8px 0;
+    border: 1px solid rgba(247, 239, 228, 0.12);
+    border-radius: 4px;
+    background: rgba(5, 3, 2, 0.96);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8);
+  }
+
+  .site-nav a {
+    display: block;
+    padding: 14px 20px;
+    font-size: 20px;
+  }
+
+  .site-nav a::after {
+    display: none;
+  }
+
+  .hero__headline {
+    bottom: 7%;
+    font-size: clamp(2.6rem, 12.5vw, 4rem);
+    line-height: 0.98;
+    white-space: normal;
+    text-wrap: balance;
+  }
+}
+
 
 /* --------------------------------------------------------- skewer layer */
 
@@ -416,15 +622,6 @@ h3 {
 /* --------------------------------------------------------------- mobile */
 
 @media (max-width: 767px) {
-  .hero__stage-wrap {
-    align-items: center;
-  }
-
-  /* Let the grill bleed off the sides so the skewers read larger on phones. */
-  .grill-stage {
-    width: 150vw;
-  }
-
   .plates__grid {
     grid-template-columns: 1fr;
     gap: 3.5rem;
@@ -436,8 +633,7 @@ h3 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .grill-stage__glow,
-  .scroll-cue::after,
+  .grill-stage__flames,
   .steam span {
     animation: none;
   }

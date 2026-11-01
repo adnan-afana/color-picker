@@ -38,7 +38,7 @@ export default function App() {
       <main>
         <Hero scene={scene} register={register} />
 
-        <section className="plates" ref={platesRef} aria-labelledby="plates-title">
+        <section className="plates" id="menu" ref={platesRef} aria-labelledby="plates-title">
           <header className="plates__header">
             <p className="eyebrow">Signature skewers</p>
             <h2 id="plates-title">{scene.platesSection.title}</h2>
@@ -51,7 +51,7 @@ export default function App() {
           </div>
         </section>
 
-        <section className="closing">
+        <section className="closing" id="contact">
           <h2>Reserve your table</h2>
           <p>Open Tuesday to Sunday, from 5 pm until the coals go out.</p>
           <button type="button" className="button button--ghost">

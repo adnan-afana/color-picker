@@ -1,12 +1,31 @@
 {
   "version": 1,
   "assets": {
-    "grill": "assets/grill.jpg"
+    "grill": "assets/hero/grill-hero.jpg",
+    "flames": "assets/hero/flames.png",
+    "logo": "assets/brand/logo.png"
   },
   "hero": {
-    "eyebrow": "Charcoal grill house",
-    "title": "Fired over live coals.",
-    "subtitle": "Hand-cut meat, overnight marinades and oak charcoal. Scroll to serve."
+    "headline": "FROM OUR GRILL TO YOUR PLATE.",
+    "logoAlt": "Sindibad Grill & BBQ",
+    "nav": [
+      {
+        "label": "Menu",
+        "href": "#menu"
+      },
+      {
+        "label": "Our Story",
+        "href": "#contact"
+      },
+      {
+        "label": "Contact",
+        "href": "#contact"
+      }
+    ],
+    "order": {
+      "label": "Order Now",
+      "href": "#menu"
+    }
   },
   "platesSection": {
     "title": "From the coals to your table",
@@ -60,9 +79,9 @@
       },
       "grill": {
         "x": 50,
-        "y": 36,
-        "width": 62,
-        "rotation": -2
+        "y": 45,
+        "width": 44,
+        "rotation": 0
       },
       "lift": {
         "x": 0,
@@ -138,8 +157,8 @@
       "grill": {
         "x": 50,
         "y": 55,
-        "width": 62,
-        "rotation": 1
+        "width": 48,
+        "rotation": 0
       },
       "lift": {
         "x": 0,
@@ -214,9 +233,9 @@
       },
       "grill": {
         "x": 50,
-        "y": 74,
-        "width": 62,
-        "rotation": -1
+        "y": 64.5,
+        "width": 52,
+        "rotation": 0
       },
       "lift": {
         "x": 0,

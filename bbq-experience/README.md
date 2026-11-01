@@ -24,7 +24,9 @@ Every image is a separate file in `public/assets/`. To swap one, save your photo
 
 | What | File | Notes |
 | --- | --- | --- |
-| Grill (hero) | `assets/grill.jpg` | 16:9 image, viewed from above |
+| Hero photo | `assets/hero/grill-hero.jpg` | 1672 × 941 (16:9 crop), no text or logo baked in |
+| Flame flicker layer | `assets/hero/flames.png` | Same size as the hero photo; only the flames, rest transparent |
+| Logo | `assets/brand/logo.png` | Transparent PNG |
 | Beef kebab skewer | `assets/skewers/beef.png` | Transparent PNG, skewer lying horizontally |
 | Shish tawook skewer | `assets/skewers/tawook.png` | Transparent PNG |
 | Grilled chicken skewer | `assets/skewers/chicken.png` | Transparent PNG |
@@ -35,7 +37,11 @@ For the cleanest hand-off, shoot each empty plate and its finished dish from the
 
 If you want different file names or folders, change the paths in `public/config/scene.json`.
 
-The current images are placeholders, rendered by `tools/generate_placeholders.py`. Run `npm run assets` to regenerate them; this needs Python with numpy, pillow and scipy.
+The hero photo, flame layer and logo were cut out of the approved reference mock-up (`tools/reference/hero-reference.png`) with `tools/prepare_hero_assets.py`. The logo there is keyed out of a screenshot, so swap in the original logo file when you have it.
+
+Header links, the headline and the ORDER NOW destination are under `hero` in `scene.json`.
+
+The skewer and plate images are placeholders, rendered by `tools/generate_placeholders.py`. Run `npm run assets` to regenerate them; this needs Python with numpy, pillow and scipy.
 
 ## Tuning the scene (no code)
 
