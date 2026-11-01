@@ -1,0 +1,268 @@
+{
+  "plates": {
+    "kebab": {
+      "size": [
+        1100,
+        956
+      ],
+      "base": "assets/plates/kebab-base.webp",
+      "reference": "assets/plates/kebab-reference.webp"
+    },
+    "tawook": {
+      "size": [
+        1100,
+        962
+      ],
+      "base": "assets/plates/tawook-base.webp",
+      "reference": "assets/plates/tawook-reference.webp"
+    },
+    "chicken": {
+      "size": [
+        1100,
+        956
+      ],
+      "base": "assets/plates/chicken-base.webp",
+      "reference": "assets/plates/chicken-reference.webp"
+    }
+  },
+  "movers": {
+    "kebab-3": {
+      "dish": "kebab",
+      "canvas": [
+        213,
+        1084
+      ],
+      "metal": "assets/food/kebab-3-metal.webp",
+      "rotation": -47.51,
+      "pieces": [
+        {
+          "src": "assets/food/kebab-3-piece-1.webp",
+          "rect": [
+            -1.67,
+            144.3,
+            221,
+            779
+          ],
+          "final": [
+            338.06,
+            644.78
+          ],
+          "finalRotation": -47.51
+        }
+      ]
+    },
+    "kebab-4": {
+      "dish": "kebab",
+      "canvas": [
+        179,
+        1013
+      ],
+      "metal": "assets/food/kebab-4-metal.webp",
+      "rotation": -45.58,
+      "pieces": [
+        {
+          "src": "assets/food/kebab-4-piece-1.webp",
+          "rect": [
+            -1.89,
+            133.97,
+            187,
+            730
+          ],
+          "final": [
+            465.12,
+            543.61
+          ],
+          "finalRotation": -45.58
+        }
+      ]
+    },
+    "tawook-2": {
+      "dish": "tawook",
+      "canvas": [
+        217,
+        1060
+      ],
+      "metal": "assets/food/tawook-2-metal.webp",
+      "rotation": -50.27,
+      "pieces": [
+        {
+          "src": "assets/food/tawook-2-piece-1.webp",
+          "rect": [
+            2.93,
+            135.58,
+            166,
+            210
+          ],
+          "final": [
+            126.12,
+            434.72
+          ],
+          "finalRotation": -50.27
+        },
+        {
+          "src": "assets/food/tawook-2-piece-2.webp",
+          "rect": [
+            -12.57,
+            292.1,
+            197,
+            178
+          ],
+          "final": [
+            238.8,
+            550.17
+          ],
+          "finalRotation": -50.27
+        },
+        {
+          "src": "assets/food/tawook-2-piece-3.webp",
+          "rect": [
+            -4.07,
+            421.1,
+            180,
+            168
+          ],
+          "final": [
+            324.06,
+            651.0
+          ],
+          "finalRotation": -50.27
+        },
+        {
+          "src": "assets/food/tawook-2-piece-4.webp",
+          "rect": [
+            -17.57,
+            541.5,
+            207,
+            217
+          ],
+          "final": [
+            445.51,
+            741.4
+          ],
+          "finalRotation": -50.27
+        },
+        {
+          "src": "assets/food/tawook-2-piece-5.webp",
+          "rect": [
+            -26.57,
+            704.04,
+            225,
+            170
+          ],
+          "final": [
+            588.04,
+            817.62
+          ],
+          "finalRotation": -50.27
+        }
+      ]
+    },
+    "tawook-3": {
+      "dish": "tawook",
+      "canvas": [
+        195,
+        1049
+      ],
+      "metal": "assets/food/tawook-3-metal.webp",
+      "rotation": -47.64,
+      "pieces": [
+        {
+          "src": "assets/food/tawook-3-piece-1.webp",
+          "rect": [
+            -15.32,
+            134.09,
+            181,
+            164
+          ],
+          "final": [
+            241.26,
+            344.73
+          ],
+          "finalRotation": -47.64
+        },
+        {
+          "src": "assets/food/tawook-3-piece-2.webp",
+          "rect": [
+            -7.32,
+            251.05,
+            165,
+            180
+          ],
+          "final": [
+            338.53,
+            413.14
+          ],
+          "finalRotation": -47.64
+        },
+        {
+          "src": "assets/food/tawook-3-piece-3.webp",
+          "rect": [
+            -13.82,
+            381.77,
+            178,
+            220
+          ],
+          "final": [
+            406.18,
+            513.87
+          ],
+          "finalRotation": -47.64
+        },
+        {
+          "src": "assets/food/tawook-3-piece-4.webp",
+          "rect": [
+            -20.32,
+            546.89,
+            191,
+            162
+          ],
+          "final": [
+            540.46,
+            601.05
+          ],
+          "finalRotation": -47.64
+        },
+        {
+          "src": "assets/food/tawook-3-piece-5.webp",
+          "rect": [
+            -21.32,
+            662.13,
+            193,
+            209
+          ],
+          "final": [
+            666.48,
+            693.54
+          ],
+          "finalRotation": -47.64
+        }
+      ]
+    },
+    "chicken": {
+      "dish": "chicken",
+      "canvas": [
+        1205,
+        1024
+      ],
+      "metal": null,
+      "rotation": -36,
+      "plateScale": 0.41992,
+      "pieces": [
+        {
+          "src": "assets/food/chicken-piece-1.webp",
+          "rect": [
+            0,
+            0,
+            1205,
+            1024
+          ],
+          "final": [
+            440.0,
+            621.0
+          ],
+          "finalRotation": -36
+        }
+      ]
+    }
+  }
+}

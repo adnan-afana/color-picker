@@ -1,13 +1,6 @@
 import type { SceneConfig } from './config/types'
 
-/** Ids of grill items that leave the grill, and of lids that open. */
-export function animatedIds(scene: SceneConfig) {
-  const moving = new Set(scene.motion.steps.flatMap((s) => s.items.map((i) => i.id)))
-  const lids = new Set(scene.motion.steps.flatMap((s) => (s.lid ? [s.lid] : [])))
-  return { moving, lids }
-}
-
-/** Position of a grill cut-out in % of the grill photo. */
+/** Position of a grill layer in % of the grill photo. */
 export function boxStyle(scene: SceneConfig, id: string) {
   const item = scene.grillLayout.items[id]
   if (!item) return undefined

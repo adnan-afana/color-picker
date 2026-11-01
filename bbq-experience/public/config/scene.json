@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "assets": {
     "grill": "assets/hero/grill-hero.jpg",
     "flames": "assets/hero/flames.png",
@@ -28,8 +28,11 @@
     }
   },
   "platesSection": {
-    "title": "From the coals to your table",
-    "subtitle": "Every skewer is finished on the grill and plated to order."
+    "title": "Our plates"
+  },
+  "closing": {
+    "title": "Reserve your table",
+    "button": "Book a table"
   },
   "grillItems": [
     {
@@ -41,10 +44,7 @@
     },
     {
       "id": "chicken",
-      "kind": "piece",
-      "images": {
-        "food": "assets/grill/chicken.png"
-      },
+      "kind": "mover",
       "alt": "Half chicken"
     },
     {
@@ -58,216 +58,103 @@
       "id": "tawook-1",
       "kind": "skewer",
       "images": {
-        "food": "assets/grill/tawook-1-food.png",
-        "metal": "assets/grill/tawook-1-metal.png"
+        "food": "assets/food/tawook-1-food.webp",
+        "metal": "assets/food/tawook-1-metal.webp"
       }
     },
     {
       "id": "tawook-2",
-      "kind": "skewer",
-      "images": {
-        "food": "assets/grill/tawook-2-food.png",
-        "metal": "assets/grill/tawook-2-metal.png"
-      }
+      "kind": "mover"
     },
     {
       "id": "tawook-3",
-      "kind": "skewer",
-      "images": {
-        "food": "assets/grill/tawook-3-food.png",
-        "metal": "assets/grill/tawook-3-metal.png"
-      }
+      "kind": "mover"
     },
     {
       "id": "kebab-1",
       "kind": "skewer",
       "images": {
-        "food": "assets/grill/kebab-1-food.png",
-        "metal": "assets/grill/kebab-1-metal.png"
+        "food": "assets/food/kebab-1-food.webp",
+        "metal": "assets/food/kebab-1-metal.webp"
       }
     },
     {
       "id": "kebab-2",
       "kind": "skewer",
       "images": {
-        "food": "assets/grill/kebab-2-food.png",
-        "metal": "assets/grill/kebab-2-metal.png"
+        "food": "assets/food/kebab-2-food.webp",
+        "metal": "assets/food/kebab-2-metal.webp"
       }
     },
     {
       "id": "kebab-3",
-      "kind": "skewer",
-      "images": {
-        "food": "assets/grill/kebab-3-food.png",
-        "metal": "assets/grill/kebab-3-metal.png"
-      }
+      "kind": "mover"
     },
     {
       "id": "kebab-4",
-      "kind": "skewer",
-      "images": {
-        "food": "assets/grill/kebab-4-food.png",
-        "metal": "assets/grill/kebab-4-metal.png"
-      }
+      "kind": "mover"
     }
   ],
   "dishes": [
     {
-      "id": "kebab",
-      "name": "Beef Kebab",
-      "description": "Prime beef shoulder, onion and seven-spice, seared over oak charcoal.",
-      "price": "$24",
-      "plate": "assets/plates/kebab-empty.webp",
-      "full": "assets/plates/kebab-full.webp"
+      "id": "chicken",
+      "name": "Half Chicken"
     },
     {
       "id": "tawook",
-      "name": "Shish Tawook",
-      "description": "Chicken breast in garlic, lemon and yoghurt marinade with charred peppers.",
-      "price": "$21",
-      "plate": "assets/plates/tawook-empty.webp",
-      "full": "assets/plates/tawook-full.webp"
+      "name": "Shish Tawook"
     },
     {
-      "id": "chicken",
-      "name": "Half Chicken",
-      "description": "Boneless thigh, sumac and smoked paprika, basted in charcoal butter.",
-      "price": "$22",
-      "plate": "assets/plates/chicken-empty.webp",
-      "full": "assets/plates/chicken-full.webp"
+      "id": "kebab",
+      "name": "Kebab"
     }
   ],
   "motion": {
     "scrub": 0.8,
     "scrollLength": {
-      "desktop": 7,
-      "mobile": 9
+      "desktop": 2.6,
+      "mobile": 2.8
     },
-    "plateFocus": 0.45,
     "lift": {
-      "y": -4,
-      "scale": 1.06
+      "y": -3,
+      "scale": 1.04
     },
-    "path": {
-      "curviness": 1.2,
-      "via": [
-        {
-          "t": 0.45,
-          "x": -4,
-          "y": -6
-        }
-      ]
-    },
+    "curviness": 0.6,
+    "stagger": 0.008,
     "lidAngle": 74,
-    "steps": [
-      {
-        "dish": "kebab",
-        "stagger": 0.015,
-        "items": [
-          {
-            "id": "kebab-3"
-          },
-          {
-            "id": "kebab-4"
-          }
-        ],
-        "timing": {
-          "lift": [
-            0.0,
-            0.04
-          ],
-          "flight": [
-            0.03,
-            0.17
-          ],
-          "settle": [
-            0.17,
-            0.21
-          ],
-          "slide": [
-            0.21,
-            0.26
-          ],
-          "reveal": [
-            0.25,
-            0.29
-          ]
-        }
-      },
-      {
-        "dish": "tawook",
-        "stagger": 0.015,
-        "items": [
-          {
-            "id": "tawook-2"
-          },
-          {
-            "id": "tawook-3"
-          }
-        ],
-        "timing": {
-          "return": [
-            0.31,
-            0.39
-          ],
-          "lift": [
-            0.39,
-            0.43
-          ],
-          "flight": [
-            0.42,
-            0.56
-          ],
-          "settle": [
-            0.56,
-            0.6
-          ],
-          "slide": [
-            0.6,
-            0.65
-          ],
-          "reveal": [
-            0.64,
-            0.68
-          ]
-        }
-      },
-      {
-        "dish": "chicken",
-        "stagger": 0,
-        "lid": "basket-lid",
-        "items": [
-          {
-            "id": "chicken"
-          }
-        ],
-        "timing": {
-          "return": [
-            0.7,
-            0.77
-          ],
-          "open": [
-            0.77,
-            0.82
-          ],
-          "lift": [
-            0.82,
-            0.86
-          ],
-          "flight": [
-            0.85,
-            0.95
-          ],
-          "settle": [
-            0.95,
-            0.98
-          ],
-          "reveal": [
-            0.97,
-            1.0
-          ]
-        }
-      }
-    ]
+    "timeline": {
+      "headline": [
+        0,
+        0.1
+      ],
+      "open": [
+        0,
+        0.1
+      ],
+      "lift": [
+        0.04,
+        0.12
+      ],
+      "flight": [
+        0.1,
+        0.62
+      ],
+      "settle": [
+        0.62,
+        0.7
+      ],
+      "slide": [
+        0.7,
+        0.8
+      ],
+      "spread": [
+        0.74,
+        0.86
+      ],
+      "handoff": [
+        0.9,
+        0.94
+      ]
+    }
   }
 }
