@@ -177,8 +177,8 @@ html {
 @keyframes flame-lick {
   0% { opacity: 0; transform: translate3d(0, 0, 0) scale(1, 1); }
   35% { opacity: 0.42; transform: translate3d(0.15%, -0.9%, 0) scale(1.01, 1.06); }
-  60% { opacity: 0.18; transform: translate3d(-0.2%, -1.6%, 0) scale(0.995, 1.1); }
-  100% { opacity: 0; transform: translate3d(0, -2.2%, 0) scale(1, 1.13); }
+  60% { opacity: 0.22; transform: translate3d(-0.2%, -2.6%, 0) scale(0.995, 1.2); }
+  100% { opacity: 0; transform: translate3d(0, -3.6%, 0) scale(1, 1.28); }
 }
 
 @keyframes flame-dance {
@@ -186,6 +186,43 @@ html {
   30% { opacity: 0.32; transform: translate3d(-0.25%, -0.6%, 0) scale(1.005, 1.05) skewX(-1.2deg); }
   65% { opacity: 0.12; transform: translate3d(0.25%, -1.2%, 0) scale(1, 1.08) skewX(1deg); }
   100% { opacity: 0.05; transform: translate3d(0, -1.5%, 0) scale(1, 1.1) skewX(0deg); }
+}
+
+/* Tall flames: soft tongues of fire that rise from the coals between the bars,
+   stretch upward, sway and fade, each on its own rhythm. They sit behind the
+   food on the grill and blend with the photo's own glow. */
+.flame-tongues {
+  position: absolute;
+  left: 9%;
+  right: 7%;
+  top: 22%;
+  height: 46%;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  filter: blur(1.6px) saturate(1.25);
+}
+
+.flame-tongues span {
+  position: absolute;
+  bottom: 0;
+  transform-origin: 50% 100%;
+  border-radius: 50% 50% 42% 42% / 78% 78% 22% 22%;
+  background:
+    radial-gradient(ellipse 22% 20% at 50% 90%, rgba(255, 222, 110, 0.95), rgba(255, 190, 60, 0) 100%),
+    radial-gradient(ellipse 48% 64% at 50% 82%, rgba(255, 138, 24, 0.95) 0%, rgba(236, 78, 12, 0.75) 40%, rgba(170, 28, 6, 0.4) 70%, rgba(110, 12, 2, 0) 100%);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation-name: flame-tongue;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes flame-tongue {
+  0% { opacity: 0; transform: translate3d(0, 4%, 0) scale(0.55, 0.25) skewX(0deg); }
+  18% { opacity: 0.8; transform: translate3d(0, 0, 0) scale(0.95, 0.7) skewX(3deg); }
+  45% { opacity: 0.7; transform: translate3d(-4%, -6%, 0) scale(0.8, 1) skewX(-4deg); }
+  72% { opacity: 0.38; transform: translate3d(5%, -14%, 0) scale(0.55, 1.15) skewX(5deg); }
+  100% { opacity: 0; transform: translate3d(0, -24%, 0) scale(0.3, 1.25) skewX(-2deg); }
 }
 
 /* Sparks rising off the coals. */
@@ -818,6 +855,7 @@ html {
 
   .grill-stage__flames--lick,
   .grill-stage__flames--dance,
+  .flame-tongues,
   .embers {
     display: none;
   }

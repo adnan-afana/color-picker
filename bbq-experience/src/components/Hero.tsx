@@ -10,6 +10,22 @@ const EMBERS = [
   { x: 81, delay: 2.8, dur: 3.6 }, { x: 31, delay: 3.6, dur: 4.0 }, { x: 64, delay: 4.1, dur: 3.2 },
 ]
 
+/**
+ * Tall flame tongues rising from the coals between the grate bars:
+ * position along the grill (%), height and width (% of the flame area),
+ * delay and duration (s). Varied so no two flames move together.
+ */
+const TONGUES = Array.from({ length: 30 }, (_, i) => {
+  const r = (n: number) => ((Math.sin((i + 1) * n) * 43758.5453) % 1 + 1) % 1
+  return {
+    x: 1 + i * 3.25 + r(1.7) * 2,
+    h: 55 + r(2.3) * 45,
+    w: 2.6 + r(3.1) * 2.2,
+    delay: -r(4.7) * 2,
+    dur: 0.8 + r(5.9) * 0.7,
+  }
+})
+
 interface HeroProps {
   scene: SceneConfig
   register: RegisterRef
@@ -32,6 +48,20 @@ export function Hero({ scene, register }: HeroProps) {
           <img className="grill-stage__flames" src={scene.assets.flames} alt="" draggable={false} />
           <img className="grill-stage__flames grill-stage__flames--lick" src={scene.assets.flames} alt="" draggable={false} />
           <img className="grill-stage__flames grill-stage__flames--dance" src={scene.assets.flames} alt="" draggable={false} />
+          <div className="flame-tongues" aria-hidden="true">
+            {TONGUES.map((t, i) => (
+              <span
+                key={i}
+                style={{
+                  left: `${t.x}%`,
+                  height: `${t.h}%`,
+                  width: `${t.w}%`,
+                  animationDelay: `${t.delay}s`,
+                  animationDuration: `${t.dur}s`,
+                }}
+              />
+            ))}
+          </div>
           <div className="embers" aria-hidden="true">
             {EMBERS.map((e, i) => (
               <span key={i} style={{ left: `${e.x}%`, animationDelay: `${e.delay}s`, animationDuration: `${e.dur}s` }} />
