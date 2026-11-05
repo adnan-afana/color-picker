@@ -111,10 +111,18 @@ html {
   max-width: none;
 }
 
-/* The photo's own flames, brightened in slow, uneven waves that travel along the grill. */
+/* Toned down so the hero reads warm rather than glaring. */
+.grill-stage__image {
+  filter: brightness(0.74) saturate(0.95);
+}
+
+/* Fire: the photo's own flames in three layers. The base layer breathes in
+   uneven pulses that travel along the grill; two more copies lick upward from
+   the coals out of step, so flame tongues rise, stretch and fall like real
+   fire. Only transform and opacity animate, so it stays smooth. */
 .grill-stage__flames {
   mix-blend-mode: screen;
-  opacity: 0.55;
+  opacity: 0.38;
   -webkit-mask-image: linear-gradient(90deg, #000 0%, rgba(0, 0, 0, 0.15) 18%, #000 33%, rgba(0, 0, 0, 0.25) 52%, #000 68%, rgba(0, 0, 0, 0.1) 84%, #000 100%);
   mask-image: linear-gradient(90deg, #000 0%, rgba(0, 0, 0, 0.15) 18%, #000 33%, rgba(0, 0, 0, 0.25) 52%, #000 68%, rgba(0, 0, 0, 0.1) 84%, #000 100%);
   -webkit-mask-size: 260% 100%;
@@ -125,21 +133,90 @@ html {
   pointer-events: none;
 }
 
+.grill-stage__flames--lick,
+.grill-stage__flames--dance {
+  transform-origin: 50% 68%;
+  will-change: transform, opacity;
+}
+
+.grill-stage__flames--lick {
+  opacity: 0;
+  -webkit-mask-size: 180% 100%;
+  mask-size: 180% 100%;
+  animation:
+    flame-drift 4.6s linear infinite reverse,
+    flame-lick 1.35s ease-in-out infinite;
+}
+
+.grill-stage__flames--dance {
+  opacity: 0;
+  -webkit-mask-size: 140% 100%;
+  mask-size: 140% 100%;
+  animation:
+    flame-drift 3.1s linear infinite,
+    flame-dance 0.95s ease-in-out infinite;
+}
+
 @keyframes flame-drift {
   from { -webkit-mask-position: 0% 0; mask-position: 0% 0; }
   to { -webkit-mask-position: 260% 0; mask-position: 260% 0; }
 }
 
 @keyframes flame-flicker {
-  0% { opacity: 0.5; }
-  9% { opacity: 0.72; }
-  17% { opacity: 0.42; }
-  31% { opacity: 0.66; }
-  44% { opacity: 0.55; }
-  58% { opacity: 0.8; }
-  67% { opacity: 0.48; }
-  81% { opacity: 0.7; }
-  92% { opacity: 0.58; }
+  0% { opacity: 0.34; }
+  9% { opacity: 0.5; }
+  17% { opacity: 0.3; }
+  31% { opacity: 0.46; }
+  44% { opacity: 0.38; }
+  58% { opacity: 0.55; }
+  67% { opacity: 0.33; }
+  81% { opacity: 0.48; }
+  92% { opacity: 0.4; }
+}
+
+@keyframes flame-lick {
+  0% { opacity: 0; transform: translate3d(0, 0, 0) scale(1, 1); }
+  35% { opacity: 0.42; transform: translate3d(0.15%, -0.9%, 0) scale(1.01, 1.06); }
+  60% { opacity: 0.18; transform: translate3d(-0.2%, -1.6%, 0) scale(0.995, 1.1); }
+  100% { opacity: 0; transform: translate3d(0, -2.2%, 0) scale(1, 1.13); }
+}
+
+@keyframes flame-dance {
+  0% { opacity: 0.05; transform: translate3d(0, 0, 0) scale(1, 1) skewX(0deg); }
+  30% { opacity: 0.32; transform: translate3d(-0.25%, -0.6%, 0) scale(1.005, 1.05) skewX(-1.2deg); }
+  65% { opacity: 0.12; transform: translate3d(0.25%, -1.2%, 0) scale(1, 1.08) skewX(1deg); }
+  100% { opacity: 0.05; transform: translate3d(0, -1.5%, 0) scale(1, 1.1) skewX(0deg); }
+}
+
+/* Sparks rising off the coals. */
+.embers {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 34%;
+  height: 34%;
+  pointer-events: none;
+}
+
+.embers span {
+  position: absolute;
+  bottom: 0;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #ffcf7a;
+  box-shadow: 0 0 6px 2px rgba(255, 140, 40, 0.85);
+  opacity: 0;
+  animation-name: ember-rise;
+  animation-timing-function: ease-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes ember-rise {
+  0% { opacity: 0; transform: translate3d(0, 0, 0) scale(1); }
+  12% { opacity: 1; }
+  55% { opacity: 0.8; transform: translate3d(10px, -110px, 0) scale(0.8); }
+  100% { opacity: 0; transform: translate3d(-6px, -230px, 0) scale(0.4); }
 }
 
 .grill-slot,
@@ -507,10 +584,11 @@ html {
   justify-content: center;
   padding-block: clamp(4.5rem, 10vh, 7rem) clamp(2rem, 6vh, 4rem);
   padding-inline: max(16px, 3.1vw);
+  /* Warm smoked-charcoal brown, lit from the grill above; it fades in from the hero's black. */
   background:
-    linear-gradient(180deg, var(--hero-black) 0%, rgba(5, 3, 2, 0) 22%),
-    radial-gradient(70% 55% at 50% 40%, rgba(196, 64, 26, 0.16), transparent 70%),
-    var(--hero-black);
+    linear-gradient(180deg, var(--hero-black) 0%, rgba(5, 3, 2, 0) 18%),
+    radial-gradient(85% 60% at 50% 42%, rgba(214, 96, 40, 0.22), transparent 72%),
+    linear-gradient(180deg, #2b1c13 0%, #352318 55%, #2a1b12 100%);
 }
 
 .plates__grid {
@@ -660,7 +738,9 @@ html {
   padding-block: 16vh;
   padding-inline: max(16px, 3.1vw);
   text-align: center;
-  background: var(--hero-black);
+  background:
+    radial-gradient(70% 90% at 50% 100%, rgba(214, 96, 40, 0.18), transparent 70%),
+    #2a1b12;
   border-top: 1px solid var(--line);
 }
 
@@ -734,6 +814,12 @@ html {
   .grill-stage__flames,
   .steam span {
     animation: none;
+  }
+
+  .grill-stage__flames--lick,
+  .grill-stage__flames--dance,
+  .embers {
+    display: none;
   }
 }
 

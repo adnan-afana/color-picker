@@ -2,6 +2,14 @@ import type { SceneConfig } from '../config/types'
 import type { RegisterRef } from '../useElementRegistry'
 import { boxStyle } from '../sceneIndex'
 
+/** Sparks rising from the coals: position along the grill (%), delay and duration (s). */
+const EMBERS = [
+  { x: 18, delay: 0, dur: 3.4 }, { x: 27, delay: 1.6, dur: 4.1 }, { x: 35, delay: 0.7, dur: 3.1 },
+  { x: 42, delay: 2.4, dur: 3.8 }, { x: 49, delay: 1.1, dur: 4.4 }, { x: 55, delay: 3.0, dur: 3.3 },
+  { x: 61, delay: 0.3, dur: 3.9 }, { x: 68, delay: 2.0, dur: 3.5 }, { x: 74, delay: 1.3, dur: 4.2 },
+  { x: 81, delay: 2.8, dur: 3.6 }, { x: 31, delay: 3.6, dur: 4.0 }, { x: 64, delay: 4.1, dur: 3.2 },
+]
+
 interface HeroProps {
   scene: SceneConfig
   register: RegisterRef
@@ -20,7 +28,15 @@ export function Hero({ scene, register }: HeroProps) {
         {/* Keeps the photo's aspect ratio so slot positions (in %) stay true. */}
         <div className="grill-stage">
           <img className="grill-stage__image" src={scene.assets.grill} alt="" draggable={false} />
+          {/* The photo's own flames, in three layers that flicker and lick upward out of step. */}
           <img className="grill-stage__flames" src={scene.assets.flames} alt="" draggable={false} />
+          <img className="grill-stage__flames grill-stage__flames--lick" src={scene.assets.flames} alt="" draggable={false} />
+          <img className="grill-stage__flames grill-stage__flames--dance" src={scene.assets.flames} alt="" draggable={false} />
+          <div className="embers" aria-hidden="true">
+            {EMBERS.map((e, i) => (
+              <span key={i} style={{ left: `${e.x}%`, animationDelay: `${e.delay}s`, animationDuration: `${e.dur}s` }} />
+            ))}
+          </div>
           {scene.grillItems.map((item) => {
             const style = boxStyle(scene, item.id)
             if (!style) return null
